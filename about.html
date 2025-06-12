@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About PixelPulse</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">PixelPulse</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <span id="user-display" class="hidden"></span>
+                <button id="login-button" class="auth-button">Login</button>
+                <button id="logout-button" class="auth-button hidden">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container content-page-container">
+        <h1 class="page-title">About PixelPulse</h1>
+        <p>Welcome to PixelPulse, your go-to destination for high-quality, inspiring images!</p>
+        <p>Our mission is to empower creators, designers, and everyone in between with access to a vast library of stunning visuals. We believe that great ideas deserve great imagery, and we strive to make it easy for you to find exactly what you need.</p>
+        
+        <h2>Our Vision</h2>
+        <p>To be the most intuitive and comprehensive image search platform, fostering creativity and making visual discovery effortless for users worldwide.</p>
+
+        <h2>How It Works</h2>
+        <p>PixelPulse aggregates images from leading free-to-use photography platforms, primarily leveraging the powerful APIs of Unsplash and Pexels. This allows us to offer you a diverse and continually updated collection without compromising on quality or licensing.</p>
+        <ul>
+            <li><strong>Unsplash:</strong> Known for its breathtaking, high-resolution photography.</li>
+            <li><strong>Pexels:</strong> Offers a wide range of free stock photos and videos.</li>
+        </ul>
+        <p>We're constantly exploring new sources to expand our library and provide you with even more variety and accuracy in your searches.</p>
+
+        <h2>Who We Are</h2>
+        <p>PixelPulse was created by **Amaan Haque**, a passionate web developer with a keen eye for design. I'm dedicated to building tools that are not only functional but also a joy to use. This project is a demonstration of modern web development practices, integrating powerful third-party services like Unsplash, Pexels, Auth0 for user management, and Formspree for communication.</p>
+
+        <h2>Get in Touch</h2>
+        <p>I love hearing from users and fellow developers! Whether you have feedback, suggestions, or just want to say hello, please visit our <a href="contact.html">Contact Us</a> page or connect directly:</p>
+        
+        <div class="social-buttons">
+            <a href="https://www.linkedin.com/in/amaanhaque3" target="_blank" rel="noopener noreferrer" class="social-button linkedin-button">
+                <span class="icon">&#xf08c;</span> LinkedIn
+            </a>
+            <a href="https://github.com/Amaan310" target="_blank" rel="noopener noreferrer" class="social-button github-button">
+                <span class="icon">&#xf09b;</span> GitHub
+            </a>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 PixelPulse. All rights reserved.</p>
+            <p>Images powered by Unsplash and Pexels APIs.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

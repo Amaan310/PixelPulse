@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelPulse - Instant Image Search</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+    
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">PixelPulse</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <span id="user-display" class="hidden"></span>
+                <button id="login-button" class="auth-button">Login</button>
+                <button id="logout-button" class="auth-button hidden">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>PixelPulse</h1>
+            <p class="tagline">Unleash your visual ideas. Search millions of high-quality images.</p>
+            <form action="">
+                <input type="text" id="search-input" placeholder="Search for anything inspiring...">
+                <button id="search-button">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <div class="loading-spinner" style="display: none;"></div>
+        
+        <div class="message-area" style="display: none;"></div>
+
+        <h2 id="results-heading" class="initial-hidden">Editor's Picks</h2>
+
+        <div class="search-results">
+            </div>
+
+        <button id="show-more-button" class="hidden">Show more</button>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 PixelPulse. All rights reserved.</p>
+            <p>Images powered by Unsplash and Pexels APIs.</p>
+        </div>
+    </footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
