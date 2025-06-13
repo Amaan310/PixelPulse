@@ -778,61 +778,69 @@ button:active {
     }
 }
 
-* --- Social Icons Only --- /
+/* --- Social Buttons (for About & Contact pages) --- */
 .social-buttons {
-display: flex;
-flex-wrap: wrap;
-gap: 15px; / Adjust spacing between icons */
-margin-top: 25px;
-justify-content: center;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px;
+    margin-top: 25px;
+    justify-content: center; /* Center buttons */
 }
 
-.social-icon-link {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-width: 40px; /* Adjust size of the square /
-height: 40px; / Adjust size of the square /
-font-size: 1.5em; / Adjust icon size /
-color: white;
-text-decoration: none;
-border-radius: 8px; / Optional: Add rounded corners */
-transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.social-button {
+    display: inline-flex; /* Use flexbox for icon and text alignment */
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: white; /* Explicitly set text and icon color to white */
 }
 
-.social-icon-link .icon {
-font-family: 'Font Awesome 6 Brands';
+.social-button .icon {
+    font-family: 'Font Awesome 6 Brands'; /* Specify Font Awesome Brands font */
+    font-weight: 400; /* Regular weight for brands */
+    font-size: 1.3em;
+    width: 25px; /* Fixed width for consistent alignment */
+    text-align: center;
+    color: white; /* Ensure icon itself is white if there's any conflict */
 }
 
-.linkedin-icon {
-background-color: #0077B5;
+.linkedin-button {
+    background-color: #0077B5; /* LinkedIn blue */
+    /* color: white; <-- Already set on .social-button, but doesn't hurt */
 }
 
-.linkedin-icon:hover {
-background-color: #005f91;
-transform: translateY(-2px);
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+.linkedin-button:hover {
+    background-color: #005f91;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.github-icon {
-background-color: #24292e;
+.github-button {
+    background-color: #24292e; /* GitHub dark grey */
+    /* color: white; <-- Already set on .social-button, but doesn't hurt */
 }
 
-.github-icon:hover {
-background-color: #1a1e22;
-transform: translateY(-2px);
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+.github-button:hover {
+    background-color: #1a1e22;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive adjustments if needed /
+/* Responsive adjustments for social buttons */
 @media (max-width: 480px) {
-.social-buttons {
-/ Adjust spacing or layout for smaller screens if icons wrap */
-}
-.social-icon-link {
-width: 35px;
-height: 35px;
-font-size: 1.3em;
-}
+    .social-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: center; /* Center stacked buttons */
+    }
+    .social-button {
+        width: 100%; /* Make them full width */
+        max-width: 250px; /* Max width for stacked buttons */
+        justify-content: center; /* Center content within button */
+    }
 }
