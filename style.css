@@ -798,7 +798,9 @@ button:active {
     border-radius: 8px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: white; /* <--- THIS IS THE LINE THAT MAKES THE FONT/TEXT WHITE */
+    color: white; /* Still ensures the base color is white */
+    /* Add a subtle white glow effect */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.6), 0 0 10px rgba(255, 255, 255, 0.4);
 }
 
 .social-button .icon {
@@ -807,7 +809,9 @@ button:active {
     font-size: 1.3em; /* Size of the icon */
     width: 25px; /* Fixed width for consistent alignment */
     text-align: center;
-    color: white; /* <--- THIS LINE ENSURES THE ICON ITSELF IS WHITE */
+    color: white; /* Ensures icon itself is white */
+    /* Apply the same glow to the icon */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.6), 0 0 10px rgba(255, 255, 255, 0.4);
 }
 
 .linkedin-button {
@@ -828,4 +832,17 @@ button:active {
     background-color: #1a1e22;
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments for social buttons */
+@media (max-width: 480px) {
+    .social-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: center; /* Center stacked buttons */
+    }
+    .social-button {
+        width: 100%; /* Make them full width */
+        max-width: 250px; /* Max width for stacked buttons */
+        justify-content: center; /* Center content within button */
+    }
 }
