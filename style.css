@@ -778,11 +778,11 @@ button:active {
     }
 }
 
-/* --- Social Buttons (for About & Contact pages) --- */
+/* --- Social Buttons (with text) --- */
 .social-buttons {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between buttons */
     margin-top: 25px;
     justify-content: center; /* Center buttons */
 }
@@ -798,21 +798,20 @@ button:active {
     border-radius: 8px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: white; /* Explicitly set text and icon color to white */
+    color: white; /* THIS IS THE KEY: Sets the text AND icon color to white */
 }
 
 .social-button .icon {
     font-family: 'Font Awesome 6 Brands'; /* Specify Font Awesome Brands font */
     font-weight: 400; /* Regular weight for brands */
-    font-size: 1.3em;
+    font-size: 1.3em; /* Size of the icon */
     width: 25px; /* Fixed width for consistent alignment */
     text-align: center;
-    color: white; /* Ensure icon itself is white if there's any conflict */
+    color: white; /* Redundancy, explicitly ensures icon is white */
 }
 
 .linkedin-button {
     background-color: #0077B5; /* LinkedIn blue */
-    /* color: white; <-- Already set on .social-button, but doesn't hurt */
 }
 
 .linkedin-button:hover {
@@ -823,7 +822,6 @@ button:active {
 
 .github-button {
     background-color: #24292e; /* GitHub dark grey */
-    /* color: white; <-- Already set on .social-button, but doesn't hurt */
 }
 
 .github-button:hover {
@@ -832,8 +830,69 @@ button:active {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive adjustments for social buttons */
-@media (max-width: 480px) {
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-content p {
+        font-size: 1em;
+    }
+
+    .search-container {
+        flex-direction: column;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    #searchInput {
+        width: 100%;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    #searchButton {
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .grid-container {
+        grid-template-columns: 1fr; /* Stack images on small screens */
+    }
+
+    .nav-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .main-nav ul li {
+        margin-left: 0;
+    }
+
+    .auth-buttons {
+        margin-left: 0; /* Reset margin for centering */
+        justify-content: center;
+        width: 100%; /* Take full width to center buttons */
+    }
+
+    .page-title {
+        font-size: 2em;
+    }
+
+    .contact-form {
+        padding: 20px;
+    }
+
     .social-buttons {
         flex-direction: column; /* Stack buttons vertically */
         align-items: center; /* Center stacked buttons */
@@ -842,5 +901,11 @@ button:active {
         width: 100%; /* Make them full width */
         max-width: 250px; /* Max width for stacked buttons */
         justify-content: center; /* Center content within button */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.8em;
     }
 }
