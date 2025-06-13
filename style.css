@@ -798,7 +798,7 @@ button:active {
     border-radius: 8px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: white; /* THIS IS THE KEY: Sets the text AND icon color to white */
+    color: white; 
 }
 
 .social-button .icon {
@@ -807,7 +807,7 @@ button:active {
     font-size: 1.3em; /* Size of the icon */
     width: 25px; /* Fixed width for consistent alignment */
     text-align: center;
-    color: white; /* Redundancy, explicitly ensures icon is white */
+    color: white; 
 }
 
 .linkedin-button {
