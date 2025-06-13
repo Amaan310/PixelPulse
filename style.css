@@ -798,7 +798,7 @@ button:active {
     border-radius: 8px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: white; 
+    color: white; /* <--- THIS IS THE LINE THAT MAKES THE FONT/TEXT WHITE */
 }
 
 .social-button .icon {
@@ -807,7 +807,7 @@ button:active {
     font-size: 1.3em; /* Size of the icon */
     width: 25px; /* Fixed width for consistent alignment */
     text-align: center;
-    color: white; 
+    color: white; /* <--- THIS LINE ENSURES THE ICON ITSELF IS WHITE */
 }
 
 .linkedin-button {
@@ -828,84 +828,4 @@ button:active {
     background-color: #1a1e22;
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
-
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.5em;
-    }
-
-    .hero-content p {
-        font-size: 1em;
-    }
-
-    .search-container {
-        flex-direction: column;
-        background-color: transparent;
-        box-shadow: none;
-    }
-
-    #searchInput {
-        width: 100%;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    #searchButton {
-        width: 100%;
-        border-radius: 8px;
-    }
-
-    .grid-container {
-        grid-template-columns: 1fr; /* Stack images on small screens */
-    }
-
-    .nav-container {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .main-nav ul {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .main-nav ul li {
-        margin-left: 0;
-    }
-
-    .auth-buttons {
-        margin-left: 0; /* Reset margin for centering */
-        justify-content: center;
-        width: 100%; /* Take full width to center buttons */
-    }
-
-    .page-title {
-        font-size: 2em;
-    }
-
-    .contact-form {
-        padding: 20px;
-    }
-
-    .social-buttons {
-        flex-direction: column; /* Stack buttons vertically */
-        align-items: center; /* Center stacked buttons */
-    }
-    .social-button {
-        width: 100%; /* Make them full width */
-        max-width: 250px; /* Max width for stacked buttons */
-        justify-content: center; /* Center content within button */
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-content h1 {
-        font-size: 1.8em;
-    }
 }
