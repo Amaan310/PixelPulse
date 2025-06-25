@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixelPulse - Instant Image Search</title>
+    <title>PixelPulse - High-Quality Image Search</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Inter for general text, Montserrat for headings -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+    <!-- Favicon updated for a more modern look if not done previously -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>">
     
+    <!-- Auth0 SDK -->
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 </head>
 <body>
@@ -23,36 +26,35 @@
                 </ul>
             </nav>
             <div class="auth-buttons">
-                <span id="user-display" class="hidden"></span>
-                <button id="login-button" class="auth-button">Login</button>
-                <button id="logout-button" class="auth-button hidden">Logout</button>
+                <span id="user-display" class="user-display hidden"></span>
+                <button id="login-button" class="btn btn-primary">Login</button>
+                <button id="logout-button" class="btn btn-secondary hidden">Logout</button>
             </div>
         </div>
     </header>
 
-    <div class="hero-section">
-        <div class="container">
-            <h1>PixelPulse</h1>
-            <p class="tagline">Unleash your visual ideas. Search millions of high-quality images.</p>
-            <form action="">
-                <input type="text" id="search-input" placeholder="Search for anything inspiring...">
-                <button id="search-button">Search</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="container main-content">
-        <div class="loading-spinner" style="display: none;"></div>
-        
-        <div class="message-area" style="display: none;"></div>
-
-        <h2 id="results-heading" class="initial-hidden">Editor's Picks</h2>
-
-        <div class="search-results">
+    <main class="main-content-area">
+        <section class="hero-section-modern">
+            <div class="container hero-content-modern">
+                <h1>PixelPulse</h1>
+                <p class="tagline-modern">Unleash your visual ideas. Search millions of high-quality images.</p>
+                <div class="search-form-modern">
+                    <input type="text" id="search-input-modern" placeholder="Search for anything inspiring...">
+                    <button id="search-button-modern" class="btn btn-accent">Search</button>
+                </div>
             </div>
+        </section>
 
-        <button id="show-more-button" class="hidden">Show more</button>
-    </div>
+        <section class="results-section container">
+            <div class="loading-spinner" style="display: none;"></div>
+            <div class="message-area-modern" style="display: none;"></div>
+            <h2 id="results-heading-modern" class="section-heading hidden">Editor's Picks</h2>
+            <div class="image-grid" id="search-results-modern">
+                <!-- Image results will be loaded here by JavaScript -->
+            </div>
+            <button id="show-more-button-modern" class="btn btn-neutral hidden">Show more</button>
+        </section>
+    </main>
 
     <footer class="site-footer">
         <div class="container">
@@ -61,7 +63,6 @@
         </div>
     </footer>
 
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
