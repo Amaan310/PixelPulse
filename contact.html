@@ -8,10 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📞</text></svg>">
     
-    <!-- Font Awesome for social media icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <!-- Auth0 SDK -->
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 </head>
 <body>
@@ -27,62 +25,59 @@
                 </ul>
             </nav>
             <div class="auth-buttons">
-                <span id="user-display" class="user-display hidden"></span>
-                <button id="login-button" class="btn btn-primary">Login</button>
-                <button id="logout-button" class="btn btn-secondary hidden">Logout</button>
+                <span id="user-display" class="hidden"></span>
+                <button id="login-button" class="auth-button">Login</button>
+                <button id="logout-button" class="auth-button hidden">Logout</button>
             </div>
         </div>
     </header>
 
-    <main class="main-content-area">
-        <div class="container content-page-wrapper">
-            <h1 class="page-title">Contact Us</h1>
-            <p>We'd love to hear from you! Please feel free to reach out with any questions, feedback, or collaboration inquiries.</p>
+    <div class="container content-page-container">
+        <h1 class="page-title">Contact Us</h1>
+        <p>We'd love to hear from you! Please feel free to reach out with any questions, feedback, or collaboration inquiries.</p>
 
-            <div class="contact-info-block">
-                <h3>Direct Contact</h3>
-                <p><strong>Email:</strong> <a href="mailto:amaanhaq77@gmail.com">amaanhaq77@gmail.com</a></p>
-                <p><strong>Phone:</strong> <a href="tel:+917974327481">+91 7974327481</a></p>
-            </div>
-
-            <div class="contact-info-block">
-                <h3>Connect with Me</h3>
-                <p>You can also find and connect with me on these platforms:</p>
-                <div class="social-buttons">
-                    <a href="https://www.linkedin.com/in/amaanhaque3" target="_blank" rel="noopener noreferrer" class="social-button linkedin-button">
-                        <span class="icon">&#xf08c;</span> LinkedIn
-                    </a>
-                    <a href="https://github.com/Amaan310" target="_blank" rel="noopener noreferrer" class="social-button github-button">
-                        <span class="icon">&#xf09b;</span> GitHub
-                    </a>
-                </div>
-            </div>
-
-            <form class="contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
-                <!-- !!! IMPORTANT: REPLACE "YOUR_FORMSPREE_ID" WITH YOUR ACTUAL FORMSPREE FORM ID !!! -->
-                <h3>Send us a message</h3>
-                <div class="form-group">
-                    <label for="name">Your Name:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Your Email:</label>
-                    <input type="email" id="email" name="_replyto" required>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject:</label>
-                    <input type="text" id="subject" name="subject" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Your Message:</label>
-                    <textarea id="message" name="message" rows="6" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-accent submit-button">Send Message</button>
-            </form>
-
-            <p class="privacy-note">We respect your privacy. All information submitted will be used solely for the purpose of responding to your inquiry.</p>
+        <div class="contact-info">
+            <h3>Direct Contact</h3>
+            <p><strong>Email:</strong> <a href="mailto:amaanhaq77@gmail.com">amaanhaq77@gmail.com</a></p>
+            <p><strong>Phone:</strong> +91 79743 27481 </p>
         </div>
-    </main>
+
+        <div class="contact-info">
+            <h3>Connect with Me</h3>
+            <p>You can also find and connect with me on these platforms:</p>
+            <div class="social-buttons">
+                <a href="https://www.linkedin.com/in/amaanhaque3" target="_blank" rel="noopener noreferrer" class="social-button linkedin-button">
+                    <span class="icon">&#xf08c;</span> LinkedIn
+                </a>
+                <a href="https://github.com/Amaan310" target="_blank" rel="noopener noreferrer" class="social-button github-button">
+                    <span class="icon">&#xf09b;</span> GitHub
+                </a>
+            </div>
+        </div>
+
+        <form class="contact-form" action="https://formspree.io/f/mnnvdbek" method="POST">
+            <h3>Send us a message</h3>
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="_replyto" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Your Message:</label>
+                <textarea id="message" name="message" rows="6" required></textarea>
+            </div>
+            <button type="submit" class="submit-button">Send Message</button>
+        </form>
+
+        <p class="privacy-note">We respect your privacy. All information submitted will be used solely for the purpose of responding to your inquiry.</p>
+    </div>
 
     <footer class="site-footer">
         <div class="container">
