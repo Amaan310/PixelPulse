@@ -1,10 +1,6 @@
 const unsplashAccessKey = "oxPBPX1L_olznwdEZxLRK7aAItQE33u5lHpM7GkoJ28";
 const pexelsAccessKey = "DAvC9EPeLKWATdhadugV1KmHU4Wd8XJsB1xFfhwhRRU9X8s85fwLAJ4r"; // PEXELS API KEY
 
-// Auth0 Configuration - !!! REPLACE THESE WITH YOUR ACTUAL AUTH0 DOMAIN AND CLIENT ID !!!
-const AUTH0_DOMAIN = "dev-nxkhq7y0hlsy6mb8"; 
-const AUTH0_CLIENT_ID = "QgfVrNnUenIJRfIBPqYE3ixqghvhFjPL"; 
-
 const formEl = document.querySelector("form");
 const inputEl = document.getElementById("search-input");
 const searchResultsEl = document.querySelector(".search-results");
@@ -13,14 +9,9 @@ const loadingSpinner = document.querySelector(".loading-spinner");
 const resultsHeading = document.getElementById("results-heading");
 const messageArea = document.querySelector('.message-area');
 
-// Auth0 related elements
-const loginButton = document.getElementById('login-button');
-const logoutButton = document.getElementById('logout-button');
-const userDisplay = document.getElementById('user-display');
-
-let auth0Client = null; // Will hold the Auth0 client instance
 let inputData = "";
 let page = 1;
+let userFavorites = []; // Store user's favorite images
 
 // --- Helper Functions ---
 function displayMessage(message, type = 'info') {
@@ -41,94 +32,55 @@ function clearMessages() {
     messageArea.textContent = '';
 }
 
-// --- Auth0 Specific Functions ---
-
-// Function to initialize Auth0 client
-const configureAuth0 = async () => {
-    // Only attempt to create if Auth0 SDK is loaded and config is set
-    if (typeof Auth0Client !== 'undefined' && AUTH0_DOMAIN && AUTH0_CLIENT_ID) {
-        try {
-            auth0Client = await Auth0Client.createAuth0Client({
-                domain: AUTH0_DOMAIN,
-                clientId: AUTH0_CLIENT_ID,
-                authorizationParams: {
-                    redirect_uri: window.location.origin // Redirect back to the current page
-                }
-            });
-
-            // Handle the redirect after login/signup
-            if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-                await auth0Client.handleRedirectCallback();
-                window.history.replaceState({}, document.title, window.location.pathname); // Clean up the URL
+// --- Favorites Functions (Auth Required) ---
+function loadUserFavorites() {
+    if (window.authManager && window.authManager.isAuthenticated()) {
+        const user = window.authManager.getCurrentUser();
+        const storedFavorites = localStorage.getItem(`pixelpulse_favorites_${user.email}`);
+        if (storedFavorites) {
+            try {
+                userFavorites = JSON.parse(storedFavorites);
+            } catch (e) {
+                console.error('Error loading favorites:', e);
+                userFavorites = [];
             }
-
-            updateUI(); // Update UI based on authentication state
-        } catch (e) {
-            console.error("Error initializing Auth0:", e);
-            displayMessage("Authentication service not available. Check configuration.", "error");
-            // Hide auth buttons if Auth0 fails to initialize
-            loginButton.classList.add('hidden');
-            logoutButton.classList.add('hidden');
         }
-    } else {
-        console.warn("Auth0 SDK not loaded or configuration missing. Auth features disabled.");
-        loginButton.classList.add('hidden');
-        logoutButton.classList.add('hidden');
     }
-};
+}
 
-// Function to update the UI based on login status
-const updateUI = async () => {
-    if (!auth0Client) { // Ensure client is initialized
+function saveUserFavorites() {
+    if (window.authManager && window.authManager.isAuthenticated()) {
+        const user = window.authManager.getCurrentUser();
+        localStorage.setItem(`pixelpulse_favorites_${user.email}`, JSON.stringify(userFavorites));
+    }
+}
+
+function toggleFavorite(imageData) {
+    if (!window.authManager || !window.authManager.isAuthenticated()) {
+        window.authManager.openLoginModal();
+        window.authManager.showNotification('Please login to save favorites!', 'info');
         return;
     }
 
-    const isAuthenticated = await auth0Client.isAuthenticated();
-
-    if (isAuthenticated) {
-        loginButton.classList.add('hidden');
-        logoutButton.classList.remove('hidden');
-        userDisplay.classList.remove('hidden');
-
-        const user = await auth0Client.getUser();
-        userDisplay.textContent = `Welcome, ${user.nickname || user.email || 'User'}!`;
+    const index = userFavorites.findIndex(fav => fav.src === imageData.src);
+    
+    if (index === -1) {
+        // Add to favorites
+        userFavorites.push(imageData);
+        window.authManager.showNotification('Added to favorites!', 'success');
     } else {
-        loginButton.classList.remove('hidden');
-        logoutButton.classList.add('hidden');
-        userDisplay.classList.add('hidden');
-        userDisplay.textContent = '';
+        // Remove from favorites
+        userFavorites.splice(index, 1);
+        window.authManager.showNotification('Removed from favorites!', 'info');
     }
-};
+    
+    saveUserFavorites();
+    return index === -1; // Return true if added, false if removed
+}
 
-// Login function
-const login = async () => {
-    if (!auth0Client) return;
-    try {
-        await auth0Client.loginWithRedirect({
-            authorizationParams: {
-                redirect_uri: window.location.origin
-            }
-        });
-    } catch (e) {
-        console.error("Auth0 login error:", e);
-        displayMessage("Could not initiate login. Please try again.", "error");
-    }
-};
-
-// Logout function
-const logout = async () => {
-    if (!auth0Client) return;
-    try {
-        await auth0Client.logout({
-            logoutParams: {
-                returnTo: window.location.origin // Redirect to home page after logout
-            }
-        });
-    } catch (e) {
-        console.error("Auth0 logout error:", e);
-        displayMessage("Could not log out. Please try again.", "error");
-    }
-};
+function isFavorite(imageSrc) {
+    return userFavorites.some(fav => fav.src === imageSrc);
+}
 
 // --- Image Search Functions ---
 async function searchImages() {
@@ -183,7 +135,7 @@ async function searchImages() {
 
         // --- Handle Pexels Response ---
         if (pexelsResponse.status === 'fulfilled' && pexelsResponse.value.ok) {
-            const pexelsData = await pexelsResponse.value.json(); // Corrected from 'pexels.json()'
+            const pexelsData = await pexelsResponse.value.json();
             if (pexelsData.photos) {
                 combinedResults = combinedResults.concat(pexelsData.photos.map(img => ({
                     src: img.src.medium,
@@ -234,6 +186,22 @@ async function searchImages() {
 
             imageLink.appendChild(titleSpan);
 
+            // Add favorite button if user is logged in
+            if (window.authManager && window.authManager.isAuthenticated()) {
+                const favoriteBtn = document.createElement('button');
+                favoriteBtn.classList.add('favorite-btn');
+                favoriteBtn.innerHTML = isFavorite(result.src) ? '❤️' : '🤍';
+                favoriteBtn.title = 'Add to favorites';
+                
+                favoriteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const wasAdded = toggleFavorite(result);
+                    favoriteBtn.innerHTML = wasAdded ? '❤️' : '🤍';
+                });
+                
+                imageWrapper.appendChild(favoriteBtn);
+            }
+
             imageWrapper.appendChild(image);
             imageWrapper.appendChild(imageLink);
             imageWrapper.appendChild(sourceSpan);
@@ -276,17 +244,29 @@ showMoreBtn.addEventListener("click", () => {
     searchImages();
 });
 
-// Auth0 specific event listeners
-loginButton.addEventListener('click', login);
-logoutButton.addEventListener('click', logout);
-
+// Listen for auth state changes to reload favorites
+window.addEventListener('storage', (e) => {
+    if (e.key && e.key.includes('pixelpulse_user')) {
+        loadUserFavorites();
+    }
+});
 
 // Call functions on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", async () => {
-    // Initialize Auth0 first
-    await configureAuth0(); 
+    // Wait a bit for auth.js to initialize
+    setTimeout(() => {
+        // Load user favorites if authenticated
+        loadUserFavorites();
+        
+        // Log auth status (optional - for debugging)
+        if (window.authManager && window.authManager.isAuthenticated()) {
+            const user = window.authManager.getCurrentUser();
+            console.log('Logged in as:', user.email);
+            console.log('Favorites loaded:', userFavorites.length);
+        }
+    }, 100);
     
-    // Then start image search
+    // Start image search
     searchImages();
 
     // Highlight active navigation link
