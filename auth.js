@@ -20,6 +20,7 @@ const auth = firebase.auth();
 class AuthManager {
     constructor() {
         this.currentUser = null;
+        this.authStateReadyFired = false; // ADDED: Flag to ensure the ready signal fires only once.
         this.init();
     }
 
@@ -100,7 +101,6 @@ class AuthManager {
         this.signupForm?.reset();
     }
 
-    // THIS FUNCTION NOW USES THE REAL FIREBASE LOGIN
     async handleLogin(e) {
         e.preventDefault();
         const email = this.loginForm.email.value;
@@ -110,7 +110,6 @@ class AuthManager {
 
         try {
             await auth.signInWithEmailAndPassword(email, password);
-            // Auth state listener will handle UI updates
             this.closeModal(this.loginModal);
             this.showNotification('Welcome back!', 'success');
         } catch (error) {
@@ -120,7 +119,6 @@ class AuthManager {
         }
     }
 
-    // THIS FUNCTION NOW USES THE REAL FIREBASE SIGN UP
     async handleSignup(e) {
         e.preventDefault();
         const name = this.signupForm.name.value;
@@ -137,7 +135,6 @@ class AuthManager {
         try {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             await userCredential.user.updateProfile({ displayName: name });
-            // Auth state listener will handle UI updates
             this.closeModal(this.signupModal);
             this.showNotification(`Welcome, ${name}! Account created.`, 'success');
         } catch (error) {
@@ -147,7 +144,6 @@ class AuthManager {
         }
     }
 
-    // THIS IS THE REAL FIREBASE SOCIAL LOGIN
     async handleSocialLogin(providerName) {
         const provider = providerName === 'google'
             ? new firebase.auth.GoogleAuthProvider()
@@ -155,7 +151,6 @@ class AuthManager {
         
         try {
             await auth.signInWithPopup(provider);
-            // Auth state listener handles UI updates and success message
             this.closeModal(this.loginModal);
             this.closeModal(this.signupModal);
         } catch (error) {
@@ -163,22 +158,18 @@ class AuthManager {
         }
     }
 
-    // THIS IS THE REAL FIREBASE LOGOUT
     async handleLogout() {
         try {
             await auth.signOut();
-            // Auth state listener handles UI updates
             this.showNotification('You have been logged out.', 'success');
         } catch (error) {
             this.showNotification(error.message, 'error');
         }
     }
 
-    // THIS IS THE MODERN, REAL-TIME FIREBASE AUTH CHECKER
     checkAuthState() {
         auth.onAuthStateChanged(user => {
             if (user) {
-                // User is signed in
                 this.currentUser = {
                     name: user.displayName,
                     email: user.email,
@@ -187,11 +178,18 @@ class AuthManager {
                 };
                 localStorage.setItem('pixelpulse_user', JSON.stringify(this.currentUser));
             } else {
-                // User is signed out
                 this.currentUser = null;
                 localStorage.removeItem('pixelpulse_user');
             }
             this.updateAuthUI();
+            
+            // --- THIS IS THE FIX ---
+            // It sends a "ready" signal to the rest of the application.
+            // It only runs once when the page first loads.
+            if (!this.authStateReadyFired) {
+                document.dispatchEvent(new CustomEvent('authStateReady'));
+                this.authStateReadyFired = true;
+            }
         });
     }
 
@@ -243,8 +241,6 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Initialize AuthManager when DOM is ready
-let authManager;
 document.addEventListener('DOMContentLoaded', () => {
-    authManager = new AuthManager();
-    window.authManager = authManager;
+    window.authManager = new AuthManager();
 });

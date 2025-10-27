@@ -1,29 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Wait a brief moment to ensure auth.js has initialized authManager
-    setTimeout(initializeFavoritesPage, 100);
-});
+// NEW: Wait for the auth signal before doing anything
+document.addEventListener('authStateReady', initializeFavoritesPage);
 
 function initializeFavoritesPage() {
     const favoritesGrid = document.getElementById('favorites-grid');
     const messageArea = document.getElementById('favorites-message');
 
-    // Check if the user is logged in
     if (window.authManager && window.authManager.currentUser) {
         const user = window.authManager.currentUser;
         const favorites = loadFavoritesFromStorage(user.email);
-
         if (favorites.length === 0) {
-            // User is logged in but has no favorites
             showMessage('You haven’t saved any favorites yet. Start exploring!', 'info');
         } else {
-            // User is logged in and has favorites, so display them
             displayFavorites(favorites);
         }
     } else {
-        // User is not logged in
         showMessage('Please log in to view your favorites.', 'no-results');
         const loginButton = document.createElement('button');
         loginButton.textContent = 'Login Here';
+        loginButton.className = 'auth-submit-btn'; // Use a consistent button style
+        loginButton.style.marginTop = '15px';
         loginButton.onclick = () => window.authManager.openLoginModal();
         messageArea.appendChild(document.createElement('br'));
         messageArea.appendChild(loginButton);
@@ -53,7 +48,7 @@ function saveFavoritesToStorage(email, favorites) {
 
 function displayFavorites(favorites) {
     const favoritesGrid = document.getElementById('favorites-grid');
-    favoritesGrid.innerHTML = ''; // Clear any previous content
+    favoritesGrid.innerHTML = ''; 
 
     favorites.forEach(imageData => {
         const imageWrapper = document.createElement('div');
@@ -71,31 +66,31 @@ function displayFavorites(favorites) {
         const sourceSpan = document.createElement('span');
         sourceSpan.classList.add('image-source');
         sourceSpan.textContent = imageData.source;
-        sourceSpan.style.opacity = '1'; // Make it always visible on this page
+        sourceSpan.style.opacity = '1';
 
-        // Create a "Remove" button
         const removeBtn = document.createElement('button');
         removeBtn.classList.add('favorite-btn');
-        removeBtn.innerHTML = '❤️'; // Filled heart for favorited items
+        removeBtn.innerHTML = '❤️';
         removeBtn.title = 'Remove from favorites';
 
         removeBtn.onclick = (e) => {
             e.preventDefault();
-            // Remove the image from the DOM immediately for a fast UX
-            imageWrapper.remove();
+            imageWrapper.style.transition = 'opacity 0.3s ease';
+            imageWrapper.style.opacity = '0';
             
-            // Get current favorites, filter out the removed one, and save back to storage
-            const currentUser = window.authManager.currentUser;
-            let currentFavorites = loadFavoritesFromStorage(currentUser.email);
-            currentFavorites = currentFavorites.filter(fav => fav.src !== imageData.src);
-            saveFavoritesToStorage(currentUser.email, currentFavorites);
+            setTimeout(() => {
+                imageWrapper.remove();
+                const currentUser = window.authManager.currentUser;
+                let currentFavorites = loadFavoritesFromStorage(currentUser.email);
+                currentFavorites = currentFavorites.filter(fav => fav.src !== imageData.src);
+                saveFavoritesToStorage(currentUser.email, currentFavorites);
+                
+                if (currentFavorites.length === 0) {
+                    showMessage('You haven’t saved any favorites yet. Start exploring!', 'info');
+                }
+            }, 300);
             
             window.authManager.showNotification('Removed from favorites!', 'info');
-            
-            // If it was the last favorite, show the empty message
-            if (currentFavorites.length === 0) {
-                 showMessage('You haven’t saved any favorites yet. Start exploring!', 'info');
-            }
         };
 
         imageWrapper.appendChild(image);
