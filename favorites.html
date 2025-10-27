@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - PixelPulse</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">PixelPulse</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="favorites.html" class="active">Favorites</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <span id="user-display" class="hidden"></span>
+                <button id="login-button" class="auth-button">Login</button>
+                <button id="signup-button" class="auth-button signup-btn">Sign Up</button>
+                <button id="logout-button" class="auth-button hidden">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <h2 id="results-heading">My Favorites</h2>
+        
+        <div id="favorites-container">
+            <div class="message-area" id="favorites-message" style="display: none;"></div>
+            <div class="search-results" id="favorites-grid">
+                </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 PixelPulse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+
+    <script src="auth.js"></script>
+    <script src="favorites.js"></script> </body>
+</html>
