@@ -1,5 +1,4 @@
-// This code runs on Netlify's servers, not in the user's browser.
-// It has secure access to your environment variables.
+const fetch = require('node-fetch'); 
 
 exports.handler = async function (event, context) {
     const { query, page } = event.queryStringParameters;
@@ -18,7 +17,6 @@ exports.handler = async function (event, context) {
 
         let combinedResults = [];
         
-        // Process Unsplash results
         if (unsplashResponse.status === 'fulfilled' && unsplashResponse.value.ok) {
             const unsplashData = await unsplashResponse.value.json();
             if (unsplashData.results) {
@@ -34,7 +32,6 @@ exports.handler = async function (event, context) {
             console.error("Unsplash API Error");
         }
         
-        // Process Pexels results
         if (pexelsResponse.status === 'fulfilled' && pexelsResponse.value.ok) {
             const pexelsData = await pexelsResponse.value.json();
             if (pexelsData.photos) {
@@ -50,7 +47,6 @@ exports.handler = async function (event, context) {
             console.error("Pexels API Error");
         }
 
-        // Shuffle the results
         combinedResults.sort(() => 0.5 - Math.random());
 
         return {
