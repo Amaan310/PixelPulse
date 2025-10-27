@@ -1,8 +1,8 @@
 const formEl = document.querySelector("form");
 if (formEl) {
 
-    // FIX: The secret API keys have been REMOVED from this file.
-    // They are now securely stored on Netlify.
+    const unsplashAccessKey = "oxPBPX1L_olznwdEZxLRK7aAItQE33u5lHpM7GkoJ28";
+    const pexelsAccessKey = "DAvC9EPeLKWATdhadugV1KmHU4Wd8XJsB1xFfhwhRRU9X8s85fwLAJ4r";
 
     const inputEl = document.getElementById("search-input");
     const searchResultsEl = document.querySelector(".search-results");
@@ -14,8 +14,6 @@ if (formEl) {
     let inputData = "";
     let page = 1;
     let userFavorites = [];
-
-    // --- Your existing functions below are UNCHANGED ---
 
     function displayMessage(message, type = 'info') {
         messageArea.textContent = message;
@@ -82,7 +80,6 @@ if (formEl) {
         return userFavorites.some(fav => fav.src === imageSrc);
     }
 
-    // --- THIS IS THE ONLY FUNCTION THAT HAS BEEN UPDATED ---
     async function searchImages() {
         inputData = inputEl.value.trim();
 
@@ -102,17 +99,57 @@ if (formEl) {
         if (page === 1) {
             searchResultsEl.innerHTML = "";
         }
-        
-        // The old, insecure fetch calls have been replaced with a single, secure call.
-        try {
-            // This new URL calls your secure "middleman" function on Netlify.
-            const secureUrl = `/.netlify/functions/search?query=${inputData}&page=${page}`;
-            const response = await fetch(secureUrl);
-            const combinedResults = await response.json();
 
-            if (!response.ok) {
-                throw new Error('Server function failed to fetch images.');
+        const unsplashUrl = `https://api.unsplash.com/search/photos?page=${page}&query=${inputData}&client_id=${unsplashAccessKey}&per_page=15`;
+        const pexelsUrl = `https://api.pexels.com/v1/search?query=${inputData}&page=${page}&per_page=15`;
+
+        let combinedResults = [];
+        let unsplashHasMore = false;
+        let pexelsHasMore = false;
+
+        try {
+            const [unsplashResponse, pexelsResponse] = await Promise.allSettled([
+                fetch(unsplashUrl),
+                fetch(pexelsUrl, { headers: { Authorization: pexelsAccessKey } })
+            ]);
+
+            if (unsplashResponse.status === 'fulfilled' && unsplashResponse.value.ok) {
+                const unsplashData = await unsplashResponse.value.json();
+                if (unsplashData.results) {
+                    combinedResults = combinedResults.concat(unsplashData.results.map(img => ({
+                        src: img.urls.small,
+                        alt: img.alt_description,
+                        link: img.links.html,
+                        source: 'Unsplash'
+                    })));
+                    unsplashHasMore = unsplashData.results.length === 15;
+                }
+            } else {
+                console.error("Unsplash API Error:", unsplashResponse.reason?.status, unsplashResponse.reason?.statusText || unsplashResponse.reason);
+                displayMessage("Could not load images from Unsplash.", "warning");
             }
+
+            if (pexelsResponse.status === 'fulfilled' && pexelsResponse.value.ok) {
+                const pexelsData = await pexelsResponse.value.json();
+                if (pexelsData.photos) {
+                    combinedResults = combinedResults.concat(pexelsData.photos.map(img => ({
+                        src: img.src.medium,
+                        alt: img.alt || "Pexels image",
+                        link: img.url,
+                        source: 'Pexels'
+                    })));
+                    pexelsHasMore = pexelsData.photos.length === 15;
+                }
+            } else {
+                console.error("Pexels API Error:", pexelsResponse.reason?.status, pexelsResponse.reason?.statusText || pexelsResponse.reason);
+                if (pexelsResponse.reason?.status === 403 || pexelsResponse.reason?.status === 429) {
+                    displayMessage("Pexels API rate limit exceeded or invalid key. Please check your key or try again later.", "warning");
+                } else {
+                    displayMessage("Could not load images from Pexels.", "warning");
+                }
+            }
+
+            combinedResults.sort(() => 0.5 - Math.random());
 
             if (combinedResults.length === 0 && page === 1) {
                 displayMessage(`No results found for "${inputEl.value.trim() || 'trending images'}". Try a different search!`, "no-results");
@@ -121,7 +158,6 @@ if (formEl) {
                 return;
             }
 
-            // The code below for displaying results is YOUR original code, unchanged.
             combinedResults.forEach((result, index) => {
                 const imageWrapper = document.createElement('div');
                 imageWrapper.classList.add("search-result");
@@ -173,11 +209,10 @@ if (formEl) {
 
             page++;
 
-            // If we got results, it's possible there are more. Show the button.
-            if (combinedResults.length > 0) {
+            if (unsplashHasMore || pexelsHasMore) {
                 showMoreBtn.classList.remove("hidden");
             } else {
-                showMoreBtn.classList.add("hidden"); // Hide if no more results came back
+                showMoreBtn.classList.add("hidden");
             }
 
         } catch (error) {
@@ -188,8 +223,6 @@ if (formEl) {
             loadingSpinner.style.display = "none";
         }
     }
-
-    // --- Your event listeners below are UNCHANGED ---
 
     formEl.addEventListener("submit", (event) => {
         event.preventDefault();
