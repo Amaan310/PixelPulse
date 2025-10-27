@@ -21,9 +21,9 @@ function displayMessage(message, type = 'info') {
 
     if (type !== 'no-results') {
          setTimeout(() => {
-            messageArea.style.display = 'none';
-            messageArea.textContent = '';
-        }, 5000);
+             messageArea.style.display = 'none';
+             messageArea.textContent = '';
+         }, 5000);
     }
 }
 
@@ -34,8 +34,10 @@ function clearMessages() {
 
 // --- Favorites Functions (Auth Required) ---
 function loadUserFavorites() {
-    if (window.authManager && window.authManager.isAuthenticated()) {
-        const user = window.authManager.getCurrentUser();
+    // UPDATED: Check for currentUser object instead of isAuthenticated()
+    if (window.authManager && window.authManager.currentUser) {
+        // UPDATED: Get user directly from currentUser
+        const user = window.authManager.currentUser;
         const storedFavorites = localStorage.getItem(`pixelpulse_favorites_${user.email}`);
         if (storedFavorites) {
             try {
@@ -49,14 +51,17 @@ function loadUserFavorites() {
 }
 
 function saveUserFavorites() {
-    if (window.authManager && window.authManager.isAuthenticated()) {
-        const user = window.authManager.getCurrentUser();
+    // UPDATED: Check for currentUser object instead of isAuthenticated()
+    if (window.authManager && window.authManager.currentUser) {
+        // UPDATED: Get user directly from currentUser
+        const user = window.authManager.currentUser;
         localStorage.setItem(`pixelpulse_favorites_${user.email}`, JSON.stringify(userFavorites));
     }
 }
 
 function toggleFavorite(imageData) {
-    if (!window.authManager || !window.authManager.isAuthenticated()) {
+    // UPDATED: Check for currentUser object instead of isAuthenticated()
+    if (!window.authManager || !window.authManager.currentUser) {
         window.authManager.openLoginModal();
         window.authManager.showNotification('Please login to save favorites!', 'info');
         return;
@@ -187,7 +192,8 @@ async function searchImages() {
             imageLink.appendChild(titleSpan);
 
             // Add favorite button if user is logged in
-            if (window.authManager && window.authManager.isAuthenticated()) {
+            // UPDATED: Check for currentUser object instead of isAuthenticated()
+            if (window.authManager && window.authManager.currentUser) {
                 const favoriteBtn = document.createElement('button');
                 favoriteBtn.classList.add('favorite-btn');
                 favoriteBtn.innerHTML = isFavorite(result.src) ? '❤️' : '🤍';
@@ -259,8 +265,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         loadUserFavorites();
         
         // Log auth status (optional - for debugging)
-        if (window.authManager && window.authManager.isAuthenticated()) {
-            const user = window.authManager.getCurrentUser();
+        // UPDATED: Check for currentUser object instead of isAuthenticated()
+        if (window.authManager && window.authManager.currentUser) {
+            // UPDATED: Get user directly from currentUser
+            const user = window.authManager.currentUser;
             console.log('Logged in as:', user.email);
             console.log('Favorites loaded:', userFavorites.length);
         }
