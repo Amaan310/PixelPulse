@@ -1,9 +1,13 @@
-// NEW: Wait for the auth signal before doing anything
 document.addEventListener('authStateReady', initializeFavoritesPage);
+document.addEventListener('pixelpulse:authStateChanged', initializeFavoritesPage);
 
 function initializeFavoritesPage() {
     const favoritesGrid = document.getElementById('favorites-grid');
     const messageArea = document.getElementById('favorites-message');
+
+    favoritesGrid.innerHTML = '';
+    messageArea.innerHTML = '';
+    messageArea.style.display = 'none';
 
     if (window.authManager && window.authManager.currentUser) {
         const user = window.authManager.currentUser;
@@ -17,7 +21,7 @@ function initializeFavoritesPage() {
         showMessage('Please log in to view your favorites.', 'no-results');
         const loginButton = document.createElement('button');
         loginButton.textContent = 'Login Here';
-        loginButton.className = 'auth-submit-btn'; // Use a consistent button style
+        loginButton.className = 'auth-submit-btn';
         loginButton.style.marginTop = '15px';
         loginButton.onclick = () => window.authManager.openLoginModal();
         messageArea.appendChild(document.createElement('br'));
@@ -27,6 +31,9 @@ function initializeFavoritesPage() {
 
 function showMessage(text, type) {
     const messageArea = document.getElementById('favorites-message');
+    while (messageArea.firstChild) {
+        messageArea.removeChild(messageArea.firstChild);
+    }
     messageArea.textContent = text;
     messageArea.className = `message-area message-${type}`;
     messageArea.style.display = 'block';

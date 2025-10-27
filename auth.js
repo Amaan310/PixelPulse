@@ -20,7 +20,7 @@ const auth = firebase.auth();
 class AuthManager {
     constructor() {
         this.currentUser = null;
-        this.authStateReadyFired = false; // ADDED: Flag to ensure the ready signal fires only once.
+        this.authStateReadyFired = false; // This is your existing flag.
         this.init();
     }
 
@@ -183,13 +183,11 @@ class AuthManager {
             }
             this.updateAuthUI();
             
-            // --- THIS IS THE FIX ---
-            // It sends a "ready" signal to the rest of the application.
-            // It only runs once when the page first loads.
             if (!this.authStateReadyFired) {
                 document.dispatchEvent(new CustomEvent('authStateReady'));
                 this.authStateReadyFired = true;
             }
+            document.dispatchEvent(new CustomEvent('pixelpulse:authStateChanged'));
         });
     }
 
@@ -232,7 +230,6 @@ class AuthManager {
     }
 }
 
-// Add notification animations to the document
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideInRight { from { transform: translateX(120%); } to { transform: translateX(0); } }
@@ -240,7 +237,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initialize AuthManager when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     window.authManager = new AuthManager();
 });
