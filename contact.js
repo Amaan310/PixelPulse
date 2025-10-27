@@ -2,47 +2,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.querySelector('.contact-form');
     const submitButton = contactForm.querySelector('.submit-button');
 
+    emailjs.init('Kustmyg_Zd3RPfL4P'); 
+
     contactForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Stop the form from redirecting to Formspree
+        event.preventDefault(); 
 
         const originalButtonText = submitButton.textContent;
         submitButton.disabled = true;
         submitButton.textContent = 'Sending...';
 
-        const formData = new FormData(contactForm);
-        
-        fetch(contactForm.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).then(response => {
-            if (response.ok) {
-                // Success!
+        const serviceID = 'service_dee1ab1';    
+        const templateID = 'template_2qi60c1';  
+
+        emailjs.sendForm(serviceID, templateID, this)
+            .then(() => {
+                // Success
                 submitButton.textContent = 'Message Sent! ✨';
-                contactForm.reset(); // Clear the form fields
+                contactForm.reset();
                 setTimeout(() => {
                     submitButton.disabled = false;
                     submitButton.textContent = originalButtonText;
-                }, 4000); // Reset button after 4 seconds
-            } else {
+                }, 4000);
+            }, (err) => {
                 // Error
-                response.json().then(data => {
-                    if (Object.hasOwn(data, 'errors')) {
-                        alert(data["errors"].map(error => error["message"]).join(", "));
-                    } else {
-                        alert('Oops! There was a problem submitting your form.');
-                    }
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                });
-            }
-        }).catch(error => {
-            // Network error
-            alert('Oops! There was a network error.');
-            submitButton.disabled = false;
-            submitButton.textContent = originalButtonText;
-        });
+                alert('Failed to send message: ' + JSON.stringify(err));
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            });
     });
 });

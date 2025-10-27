@@ -21,7 +21,10 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 node_modules
-EMAIL.js - service_dee1ab1
+EMAIL.js SERVICE ID - service_dee1ab1
+TEMPLATE ID - template_2qi60c1
+PUBLIC KEY - Kustmyg_Zd3RPfL4P
+
 auth.js
 contact.js
 favorites.js
